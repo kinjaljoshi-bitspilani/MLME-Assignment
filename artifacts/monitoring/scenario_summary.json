@@ -1,0 +1,5 @@
+{
+  "scenario1": "warn",
+  "scenario2": "alert",
+  "scenario3": "alert"
+}

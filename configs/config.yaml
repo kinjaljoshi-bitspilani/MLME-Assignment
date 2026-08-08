@@ -1,0 +1,146 @@
+# =====================================================================
+# Mini Production ML System - Customer Churn Prediction
+# Single source of truth for every stage of the pipeline.
+# Nothing below is hard-coded in src/; every module reads this file.
+# =====================================================================
+
+project:
+  name: retail-churn-90d
+  seed: 42
+  # "Today" for the simulated production system. Everything is computed
+  # as-if we are standing at this instant, so no future data can leak.
+  system_asof: "2011-12-09"
+
+paths:
+  raw_csv: data/raw/online_retail.csv
+  incoming_dir: data/incoming            # daily micro-batch drop zone
+  warehouse_events: data/warehouse/events.parquet     # append-only event table
+  warehouse_snapshots: data/warehouse/snapshots.parquet # training table (features+label)
+  feature_store: data/feature_store/customer_features.parquet
+  reference_dir: data/reference          # training reference stats for drift
+  ingestion_log: artifacts/logs/ingestion_log.jsonl
+  models_dir: models
+  registry: models/registry.json
+  eval_dir: artifacts/eval
+  monitoring_dir: artifacts/monitoring
+
+# --------------------------- data cleaning ---------------------------
+cleaning:
+  # StockCodes that are not physical products (postage, samples, fees...).
+  non_product_stock_codes: ["POST", "D", "DOT", "M", "C2", "CRUK", "S", "B",
+                            "BANK CHARGES", "PADS", "AMAZONFEE", "GIFT"]
+  drop_missing_customer: true     # unattributable to a customer -> unusable for churn
+  min_unit_price: 0.0             # strictly greater than this for a valid sale
+  # Cancellations (InvoiceNo starting with 'C') are NOT dropped: they are
+  # retained as a separate `is_return` event stream and become a feature.
+
+# --------------------------- label design ----------------------------
+label:
+  name: churn_90d
+  # A customer is IN SCOPE at snapshot t if they purchased at least once in
+  # the `activity_window_days` before t.
+  activity_window_days: 180
+  # Label = 1 if the customer makes NO purchase in (t, t + horizon_days].
+  horizon_days: 90
+  # Month-end observation dates. Each must satisfy t + horizon <= system_asof.
+  snapshot_dates:
+    - "2011-03-31"
+    - "2011-04-30"
+    - "2011-05-31"
+    - "2011-06-30"   # validation
+    - "2011-07-31"   # PURGED - embargo buffer, see split below
+    - "2011-08-31"   # test
+
+# ------------------------- temporal split ----------------------------
+# Strictly time-ordered. A random split would leak because the same
+# customer_id appears in several snapshots (entity leakage) and because
+# later snapshots share event history with earlier ones.
+split:
+  train_snapshots: ["2011-03-31", "2011-04-30", "2011-05-31"]
+  valid_snapshots: ["2011-06-30"]
+  test_snapshots:  ["2011-08-31"]
+  # 2011-07-31 is deliberately excluded as a purge/embargo month so that the
+  # label windows of the training snapshots (last one ends 2011-08-29) do not
+  # overlap the feature window of the test snapshot (ends 2011-08-31).
+  purged_snapshots: ["2011-07-31"]
+
+# --------------------------- features --------------------------------
+features:
+  windows_days: [30, 90, 180]
+  top_n_countries: 6          # rest collapsed to "Other" to bound cardinality
+  # Deliberately EXCLUDED: snapshot month/quarter. With only 6 observation
+  # dates a month feature is a near-unique group id; the model would memorise
+  # per-month churn rates that cannot exist for a future month.
+  excluded: ["snapshot_month", "snapshot_quarter"]
+
+# --------------------------- training --------------------------------
+training:
+  baseline:
+    type: logistic_regression
+    C: 1.0
+    max_iter: 2000
+    class_weight: balanced
+  candidate:
+    type: lightgbm
+    n_estimators: 600
+    learning_rate: 0.05
+    num_leaves: 31
+    min_child_samples: 40
+    subsample: 0.9
+    subsample_freq: 1
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    early_stopping_rounds: 50
+  calibration: isotonic        # applied on the validation fold
+  primary_metric: roc_auc
+
+# ----------------------- promotion guardrails ------------------------
+# The candidate is promoted to `production` only if ALL gates pass.
+#
+# These numbers are DERIVED, not guessed. With margin=45, offer cost=8 and
+# uplift=0.30, a contacted customer returns 0.30 * 45 = 13.50 in expectation if
+# they were really going to churn, and costs 8 regardless. Break-even precision
+# inside the contacted slice is therefore 8 / 13.50 = 0.593. Random targeting
+# achieves only the base rate (0.39-0.48), i.e. it loses money -- so clearing
+# 0.593 is exactly the condition for the model to be worth deploying at all.
+# `min_precision_at_top_quintile` is that break-even plus a small safety margin.
+promotion:
+  min_precision_at_top_quintile: 0.60  # campaign break-even = 0.593
+  min_roc_auc: 0.72                    # must clearly beat the recency-only rule
+  min_pr_auc: 0.55
+  max_brier: 0.21                      # calibration guard
+  min_recall_at_top_decile: 0.15
+  max_auc_regression_vs_prod: 0.01     # candidate may not be worse than the
+                                       # live model by more than this
+
+# --------------------------- business ---------------------------------
+# Used to convert probabilities into an expected-value decision.
+business:
+  gross_margin_per_retained_customer: 45.0   # GBP
+  retention_offer_cost: 8.0                  # GBP per contacted customer
+  campaign_uplift: 0.30                      # P(save | churner is contacted)
+  campaign_capacity_pct: 0.20                # we can only contact the top 20%
+
+# --------------------------- serving ----------------------------------
+serving:
+  host: "127.0.0.1"
+  port: 8000
+  model_stage: production      # the API always loads whatever is 'production'
+  max_batch_size: 1000
+  latency_slo_ms_p95: 150
+
+# ------------------------- monitoring ---------------------------------
+monitoring:
+  psi_warn: 0.10               # 0.10-0.25 = moderate shift
+  psi_alert: 0.25              # > 0.25 = significant shift
+  ks_pvalue_alert: 0.01
+  null_rate_alert: 0.02
+  drift_share_alert: 0.30      # alert if >30% of features drift
+  min_rows_for_check: 200
+
+# ------------------------ retraining triggers -------------------------
+retraining:
+  max_model_age_days: 30
+  min_new_labelled_snapshots: 1
+  auc_drop_alert: 0.05         # vs. the AUC recorded at promotion time
+  drift_share_trigger: 0.30

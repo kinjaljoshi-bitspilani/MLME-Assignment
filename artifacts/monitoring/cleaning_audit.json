@@ -1,0 +1,34 @@
+[
+  {
+    "rule": "drop_missing_customer_id",
+    "rows_before": 541909,
+    "rows_after": 406829,
+    "rows_removed": 135080,
+    "pct_of_raw_removed": 24.927,
+    "rationale": "Churn is defined per customer; rows with no CustomerID cannot be labelled."
+  },
+  {
+    "rule": "drop_non_product_stock_codes",
+    "rows_before": 406829,
+    "rows_after": 404909,
+    "rows_removed": 1920,
+    "pct_of_raw_removed": 0.354,
+    "rationale": "POST/DOT/M/BANK CHARGES etc. are adjustments, not purchases."
+  },
+  {
+    "rule": "drop_non_positive_price_sales",
+    "rows_before": 404909,
+    "rows_after": 404876,
+    "rows_removed": 33,
+    "pct_of_raw_removed": 0.006,
+    "rationale": "A sale with price <= 0 is promotional noise; it would distort AOV/revenue."
+  },
+  {
+    "rule": "drop_exact_duplicate_lines",
+    "rows_before": 404876,
+    "rows_after": 399654,
+    "rows_removed": 5222,
+    "pct_of_raw_removed": 0.964,
+    "rationale": "Identical (invoice, product, qty, price, timestamp) rows are re-sends."
+  }
+]

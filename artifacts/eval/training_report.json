@@ -1,0 +1,460 @@
+{
+  "run": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.5-fc-v18-x86_64-with-glibc2.39",
+    "numpy": "2.4.4",
+    "pandas": "3.0.2",
+    "scikit_learn": "1.8.0",
+    "git_sha": null,
+    "run_at_utc": "2026-08-07T15:07:58.503544+00:00"
+  },
+  "config_used": {
+    "label": {
+      "name": "churn_90d",
+      "activity_window_days": 180,
+      "horizon_days": 90,
+      "snapshot_dates": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31",
+        "2011-06-30",
+        "2011-07-31",
+        "2011-08-31"
+      ]
+    },
+    "split": {
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "valid_snapshots": [
+        "2011-06-30"
+      ],
+      "test_snapshots": [
+        "2011-08-31"
+      ],
+      "purged_snapshots": [
+        "2011-07-31"
+      ]
+    },
+    "features": {
+      "windows_days": [
+        30,
+        90,
+        180
+      ],
+      "top_n_countries": 6,
+      "excluded": [
+        "snapshot_month",
+        "snapshot_quarter"
+      ]
+    },
+    "training": {
+      "baseline": {
+        "type": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 2000,
+        "class_weight": "balanced"
+      },
+      "candidate": {
+        "type": "lightgbm",
+        "n_estimators": 600,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_child_samples": 40,
+        "subsample": 0.9,
+        "subsample_freq": 1,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0,
+        "early_stopping_rounds": 50
+      },
+      "calibration": "isotonic",
+      "primary_metric": "roc_auc"
+    },
+    "promotion": {
+      "min_precision_at_top_quintile": 0.6,
+      "min_roc_auc": 0.72,
+      "min_pr_auc": 0.55,
+      "max_brier": 0.21,
+      "min_recall_at_top_decile": 0.15,
+      "max_auc_regression_vs_prod": 0.01
+    },
+    "business": {
+      "gross_margin_per_retained_customer": 45.0,
+      "retention_offer_cost": 8.0,
+      "campaign_uplift": 0.3,
+      "campaign_capacity_pct": 0.2
+    }
+  },
+  "data": {
+    "n_events": 399654,
+    "n_customers": 4362,
+    "event_date_min": "2010-12-01",
+    "event_date_max": "2011-12-09",
+    "snapshot_table_rows": 15478
+  },
+  "splits": [
+    {
+      "fold": "train",
+      "snapshots": "2011-03-31, 2011-04-30, 2011-05-31",
+      "n_rows": 7222,
+      "n_customers": 2716,
+      "churn_rate": 0.4754
+    },
+    {
+      "fold": "valid",
+      "snapshots": "2011-06-30",
+      "n_rows": 2722,
+      "n_customers": 2722,
+      "churn_rate": 0.4838
+    },
+    {
+      "fold": "test",
+      "snapshots": "2011-08-31",
+      "n_rows": 2768,
+      "n_customers": 2768,
+      "churn_rate": 0.3931
+    }
+  ],
+  "metrics_valid": [
+    {
+      "model": "trivial_prior",
+      "n": 2722,
+      "base_rate": 0.4838354151359295,
+      "roc_auc": 0.5,
+      "pr_auc": 0.4838354151359295,
+      "accuracy": 0.5161645848640706,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "brier": 0.24981065607342132,
+      "log_loss": 0.6927686785218578,
+      "precision_at_top_decile": 0.326007326007326,
+      "recall_at_top_decile": 0.06757782839787396,
+      "lift_at_top_decile": 0.6737979813150656,
+      "precision_at_top_quintile": 0.344954128440367,
+      "recall_at_top_quintile": 0.1427486712224753,
+      "lift_at_top_quintile": 0.7129575836102345
+    },
+    {
+      "model": "heuristic_recency",
+      "n": 2722,
+      "base_rate": 0.4838354151359295,
+      "roc_auc": 0.6654423268671115,
+      "pr_auc": 0.6406402216604217,
+      "accuracy": 0.6208670095518002,
+      "precision": 0.684346701164295,
+      "recall": 0.40167046317388005,
+      "f1": 0.5062200956937799,
+      "brier": 0.26515101435366756,
+      "log_loss": 0.8309005409211694,
+      "precision_at_top_decile": 0.7472527472527473,
+      "recall_at_top_decile": 0.1548974943052392,
+      "lift_at_top_decile": 1.5444358223401504,
+      "precision_at_top_quintile": 0.7137614678899082,
+      "recall_at_top_quintile": 0.2953682611996963,
+      "lift_at_top_quintile": 1.4752154256616024
+    },
+    {
+      "model": "baseline_logreg",
+      "n": 2722,
+      "base_rate": 0.4838354151359295,
+      "roc_auc": 0.7530994901061131,
+      "pr_auc": 0.6944238781109463,
+      "accuracy": 0.6983835415135929,
+      "precision": 0.6781609195402298,
+      "recall": 0.7167805618830676,
+      "f1": 0.6969361387966039,
+      "brier": 0.19982536223298872,
+      "log_loss": 0.5806830150205281,
+      "precision_at_top_decile": 0.73992673992674,
+      "recall_at_top_decile": 0.1533788914198937,
+      "lift_at_top_decile": 1.5292942946701489,
+      "precision_at_top_quintile": 0.7467889908256881,
+      "recall_at_top_quintile": 0.3090356871678056,
+      "lift_at_top_quintile": 1.5434773219647098
+    },
+    {
+      "model": "candidate_lightgbm",
+      "n": 2722,
+      "base_rate": 0.4838354151359295,
+      "roc_auc": 0.7915271686703039,
+      "pr_auc": 0.730556133257566,
+      "accuracy": 0.7237325495958854,
+      "precision": 0.6780088216761184,
+      "recall": 0.8170083523158694,
+      "f1": 0.7410468319559229,
+      "brier": 0.18348583088106307,
+      "log_loss": 0.5429090234603489,
+      "precision_at_top_decile": 0.8058608058608059,
+      "recall_at_top_decile": 0.16704631738800305,
+      "lift_at_top_decile": 1.665568043700162,
+      "precision_at_top_quintile": 0.7779816513761468,
+      "recall_at_top_quintile": 0.3219438116932422,
+      "lift_at_top_quintile": 1.6079468906954226
+    }
+  ],
+  "metrics_test": [
+    {
+      "model": "trivial_prior",
+      "n": 2768,
+      "base_rate": 0.3930635838150289,
+      "roc_auc": 0.5,
+      "pr_auc": 0.3930635838150289,
+      "accuracy": 0.6069364161849711,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "brier": 0.24533616535751976,
+      "log_loss": 0.6838124381837839,
+      "precision_at_top_decile": 0.23465703971119134,
+      "recall_at_top_decile": 0.05974264705882353,
+      "lift_at_top_decile": 0.596995115735825,
+      "precision_at_top_quintile": 0.2779783393501805,
+      "recall_at_top_quintile": 0.14154411764705882,
+      "lift_at_top_quintile": 0.7072095986409004
+    },
+    {
+      "model": "heuristic_recency",
+      "n": 2768,
+      "base_rate": 0.3930635838150289,
+      "roc_auc": 0.6571124934348741,
+      "pr_auc": 0.5413117504745357,
+      "accuracy": 0.6441473988439307,
+      "precision": 0.558589306029579,
+      "recall": 0.45128676470588236,
+      "f1": 0.4992374173868836,
+      "brier": 0.2461711127676914,
+      "log_loss": 0.7776588149964709,
+      "precision_at_top_decile": 0.631768953068592,
+      "recall_at_top_decile": 0.16084558823529413,
+      "lift_at_top_decile": 1.6072945423656826,
+      "precision_at_top_quintile": 0.6137184115523465,
+      "recall_at_top_quintile": 0.3125,
+      "lift_at_top_quintile": 1.5613718411552344
+    },
+    {
+      "model": "baseline_logreg",
+      "n": 2768,
+      "base_rate": 0.3930635838150289,
+      "roc_auc": 0.7429955575980393,
+      "pr_auc": 0.6008964786582045,
+      "accuracy": 0.6734104046242775,
+      "precision": 0.5684523809523809,
+      "recall": 0.7022058823529411,
+      "f1": 0.6282894736842105,
+      "brier": 0.20295053387286938,
+      "log_loss": 0.5857222685543656,
+      "precision_at_top_decile": 0.6498194945848376,
+      "recall_at_top_decile": 0.16544117647058823,
+      "lift_at_top_decile": 1.6532172435761308,
+      "precision_at_top_quintile": 0.648014440433213,
+      "recall_at_top_quintile": 0.32996323529411764,
+      "lift_at_top_quintile": 1.648624973455086
+    },
+    {
+      "model": "candidate_lightgbm",
+      "n": 2768,
+      "base_rate": 0.3930635838150289,
+      "roc_auc": 0.7255998883928572,
+      "pr_auc": 0.5622958904207257,
+      "accuracy": 0.6546242774566474,
+      "precision": 0.5437086092715232,
+      "recall": 0.7545955882352942,
+      "f1": 0.6320246343341032,
+      "brier": 0.2111484499752533,
+      "log_loss": 0.6070829217163239,
+      "precision_at_top_decile": 0.6101083032490975,
+      "recall_at_top_decile": 0.15533088235294118,
+      "lift_at_top_decile": 1.552187300913145,
+      "precision_at_top_quintile": 0.6064981949458483,
+      "recall_at_top_quintile": 0.3088235294117647,
+      "lift_at_top_quintile": 1.5430027606710552
+    }
+  ],
+  "business_value_test": {
+    "trivial_prior": {
+      "capacity_pct": 0.2,
+      "n_contacted": 554,
+      "true_churners_contacted": 154,
+      "expected_customers_saved": 46.2,
+      "gross_margin_gbp": 2079.0,
+      "campaign_cost_gbp": 4432.0,
+      "net_value_gbp": -2353.0,
+      "net_value_random_targeting_gbp": -1492.28,
+      "uplift_vs_random_gbp": -860.72,
+      "roi": -0.5309
+    },
+    "heuristic_recency": {
+      "capacity_pct": 0.2,
+      "n_contacted": 554,
+      "true_churners_contacted": 340,
+      "expected_customers_saved": 102.0,
+      "gross_margin_gbp": 4590.0,
+      "campaign_cost_gbp": 4432.0,
+      "net_value_gbp": 158.0,
+      "net_value_random_targeting_gbp": -1492.28,
+      "uplift_vs_random_gbp": 1650.28,
+      "roi": 0.0356
+    },
+    "baseline_logreg": {
+      "capacity_pct": 0.2,
+      "n_contacted": 554,
+      "true_churners_contacted": 359,
+      "expected_customers_saved": 107.7,
+      "gross_margin_gbp": 4846.5,
+      "campaign_cost_gbp": 4432.0,
+      "net_value_gbp": 414.5,
+      "net_value_random_targeting_gbp": -1492.28,
+      "uplift_vs_random_gbp": 1906.78,
+      "roi": 0.0935
+    },
+    "candidate_gbdt": {
+      "capacity_pct": 0.2,
+      "n_contacted": 554,
+      "true_churners_contacted": 336,
+      "expected_customers_saved": 100.8,
+      "gross_margin_gbp": 4536.0,
+      "campaign_cost_gbp": 4432.0,
+      "net_value_gbp": 104.0,
+      "net_value_random_targeting_gbp": -1492.28,
+      "uplift_vs_random_gbp": 1596.28,
+      "roi": 0.0235
+    }
+  },
+  "promotion": {
+    "decision": "PROMOTE",
+    "promote": true,
+    "candidate": "candidate_lightgbm",
+    "incumbent": "baseline_logreg",
+    "roc_auc_delta_vs_incumbent": 0.038427678564190826,
+    "failed_gates": [],
+    "gates": [
+      {
+        "gate": "roc_auc_floor",
+        "observed": 0.791527,
+        "operator": ">=",
+        "threshold": 0.72,
+        "passed": true,
+        "rationale": "Absolute ranking-quality floor; below this the campaign list is not reliably better than intuition."
+      },
+      {
+        "gate": "pr_auc_floor",
+        "observed": 0.730556,
+        "operator": ">=",
+        "threshold": 0.55,
+        "passed": true,
+        "rationale": "Guards precision on the positive class, which drives campaign waste."
+      },
+      {
+        "gate": "calibration_brier_ceiling",
+        "observed": 0.183486,
+        "operator": "<=",
+        "threshold": 0.21,
+        "passed": true,
+        "rationale": "Probabilities are multiplied by margin to rank; poor calibration corrupts the expected-value ordering."
+      },
+      {
+        "gate": "recall_at_top_decile_floor",
+        "observed": 0.167046,
+        "operator": ">=",
+        "threshold": 0.15,
+        "passed": true,
+        "rationale": "The contactable slice must capture a meaningful share of churners."
+      },
+      {
+        "gate": "campaign_breakeven_precision",
+        "observed": 0.777982,
+        "operator": ">=",
+        "threshold": 0.6,
+        "passed": true,
+        "rationale": "THE decisive gate. Break-even precision in the contacted slice is offer_cost / (uplift * margin) = 8 / 13.50 = 0.593. Below this the retention campaign destroys value, so no AUC improvement can rescue it."
+      },
+      {
+        "gate": "no_regression_vs_production",
+        "observed": 0.038428,
+        "operator": ">=",
+        "threshold": -0.01,
+        "passed": true,
+        "rationale": "A candidate may not be worse than the live model by more than the tolerance, even if the floors pass."
+      }
+    ],
+    "evaluated_at_utc": "2026-08-07T15:07:58.499199+00:00"
+  },
+  "registered": {
+    "baseline_logreg": {
+      "model_id": "retail-churn-90d:v5",
+      "stage": "staging"
+    },
+    "candidate_gbdt": {
+      "model_id": "retail-churn-90d:v6",
+      "stage": "production"
+    }
+  },
+  "production_model": "retail-churn-90d:v6",
+  "top_features": [
+    {
+      "feature": "lifetime_revenue",
+      "auc_drop_mean": 0.03952696330763612,
+      "auc_drop_std": 0.0036014452448173747
+    },
+    {
+      "feature": "avg_interpurchase_gap_days",
+      "auc_drop_mean": 0.031889687821723786,
+      "auc_drop_std": 0.0020485985702264247
+    },
+    {
+      "feature": "avg_unit_price_90d",
+      "auc_drop_mean": 0.018147682779529828,
+      "auc_drop_std": 0.003101414860822779
+    },
+    {
+      "feature": "avg_items_per_order_90d",
+      "auc_drop_mean": 0.015787255084752806,
+      "auc_drop_std": 0.0023326425306340014
+    },
+    {
+      "feature": "product_breadth_ratio",
+      "auc_drop_mean": 0.013703580606198407,
+      "auc_drop_std": 0.001436602966062588
+    },
+    {
+      "feature": "distinct_products_90d",
+      "auc_drop_mean": 0.013414397544295098,
+      "auc_drop_std": 0.0013418939903821682
+    },
+    {
+      "feature": "revenue_180d",
+      "auc_drop_mean": 0.013350032560791546,
+      "auc_drop_std": 0.0021698775041814906
+    },
+    {
+      "feature": "return_value_ratio_180d",
+      "auc_drop_mean": 0.013320903487652691,
+      "auc_drop_std": 0.0018429562477516915
+    },
+    {
+      "feature": "interpurchase_gap_cv",
+      "auc_drop_mean": 0.012706869111023079,
+      "auc_drop_std": 0.0026718790681026436
+    },
+    {
+      "feature": "revenue_90d",
+      "auc_drop_mean": 0.008671870989010544,
+      "auc_drop_std": 0.0022755011017623304
+    },
+    {
+      "feature": "active_days_ratio",
+      "auc_drop_mean": 0.008590914863663656,
+      "auc_drop_std": 0.0008717494300190415
+    },
+    {
+      "feature": "aov_90d",
+      "auc_drop_mean": 0.008046163366002413,
+      "auc_drop_std": 0.0009271627083224399
+    }
+  ],
+  "reference_stats_path": "data/reference/training_reference_profile.json",
+  "feature_store_path": "data/feature_store/customer_features.parquet"
+}

@@ -1,0 +1,26 @@
+{
+  "batch_name": "schema_break",
+  "evaluated_at_utc": "2026-08-07T15:08:13.918588+00:00",
+  "n_rows": 2768,
+  "overall_status": "alert",
+  "action": "PAGE on-call DS. Block retraining on this batch until triaged.",
+  "checks": [
+    {
+      "check": "schema",
+      "passed": false,
+      "severity": "alert",
+      "missing_columns": [
+        "orders_90d"
+      ],
+      "unexpected_columns": [],
+      "non_numeric_numeric_columns": [],
+      "message": "SCHEMA BREAK missing=['orders_90d'] wrong_dtype=[]"
+    },
+    {
+      "check": "data_quality",
+      "passed": false,
+      "severity": "skipped",
+      "message": "Skipped: schema check failed."
+    }
+  ]
+}

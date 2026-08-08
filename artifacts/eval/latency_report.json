@@ -1,0 +1,61 @@
+{
+  "measured_at": "2026-07-28T14:19:00.811163",
+  "transport": "http http://127.0.0.1:8000",
+  "n_payloads": 400,
+  "latency_slo_ms_p95": 150.0,
+  "online": {
+    "scenario": "online_sequential_predict",
+    "n_requests": 400,
+    "n_errors": 0,
+    "avg_ms": 9.828,
+    "p50_ms": 9.666,
+    "p90_ms": 10.714,
+    "p95_ms": 11.096,
+    "p99_ms": 12.127,
+    "min_ms": 8.94,
+    "max_ms": 12.764,
+    "stdev_ms": 0.649,
+    "throughput_rps": 101.7
+  },
+  "concurrent": {
+    "scenario": "online_concurrent_8_workers",
+    "n_requests": 400,
+    "n_errors": 0,
+    "avg_ms": 78.328,
+    "p50_ms": 77.577,
+    "p90_ms": 104.599,
+    "p95_ms": 111.138,
+    "p99_ms": 142.398,
+    "min_ms": 24.426,
+    "max_ms": 153.253,
+    "stdev_ms": 20.502,
+    "throughput_rps": 101.5,
+    "wall_clock_s": 3.94,
+    "workers": 8
+  },
+  "batch": [
+    {
+      "scenario": "batch_predict",
+      "batch_size": 1,
+      "median_total_ms": 9.374,
+      "ms_per_row": 9.3736,
+      "rows_per_second": 106.7
+    },
+    {
+      "scenario": "batch_predict",
+      "batch_size": 10,
+      "median_total_ms": 9.805,
+      "ms_per_row": 0.9805,
+      "rows_per_second": 1019.9
+    },
+    {
+      "scenario": "batch_predict",
+      "batch_size": 100,
+      "median_total_ms": 15.813,
+      "ms_per_row": 0.1581,
+      "rows_per_second": 6323.8
+    }
+  ],
+  "slo_met_sequential": true,
+  "slo_met_concurrent": true
+}

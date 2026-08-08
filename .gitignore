@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+env/
+
+# NOTE: data and models are intentionally committed so the repo can be cloned
+# and run as-is for marking. In a normal project these would be ignored and
+# fetched from object storage instead.

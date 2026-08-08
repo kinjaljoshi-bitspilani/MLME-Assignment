@@ -1,0 +1,540 @@
+{
+  "models": [
+    {
+      "name": "retail-churn-90d",
+      "version": "v1",
+      "model_id": "retail-churn-90d:v1",
+      "stage": "staging",
+      "artefact_path": "models/retail-churn-90d_v1.joblib",
+      "registered_at": "2026-07-28T13:56:01.972423+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.753099,
+        "valid_pr_auc": 0.694424,
+        "valid_brier": 0.199825,
+        "test_roc_auc": 0.742996,
+        "test_pr_auc": 0.600896
+      },
+      "params": {
+        "family": "baseline_logreg",
+        "type": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 2000,
+        "class_weight": "balanced"
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-07-28T13:56:01.970469+00:00"
+      },
+      "fit_seconds": 0.057
+    },
+    {
+      "name": "retail-churn-90d",
+      "version": "v2",
+      "model_id": "retail-churn-90d:v2",
+      "stage": "archived",
+      "artefact_path": "models/retail-churn-90d_v2.joblib",
+      "registered_at": "2026-07-28T13:56:01.988866+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.791527,
+        "valid_pr_auc": 0.730556,
+        "valid_brier": 0.183486,
+        "test_roc_auc": 0.7256,
+        "test_pr_auc": 0.562296
+      },
+      "params": {
+        "family": "candidate_gbdt",
+        "type": "lightgbm",
+        "n_estimators": 600,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_child_samples": 40,
+        "subsample": 0.9,
+        "subsample_freq": 1,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0,
+        "early_stopping_rounds": 50
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-07-28T13:56:01.970469+00:00"
+      },
+      "fit_seconds": 0.417,
+      "promoted_at": "2026-07-28T14:37:52.242515+00:00",
+      "archived_at": "2026-07-28T14:37:52.243222+00:00"
+    },
+    {
+      "name": "retail-churn-90d",
+      "version": "v3",
+      "model_id": "retail-churn-90d:v3",
+      "stage": "staging",
+      "artefact_path": "models/retail-churn-90d_v3.joblib",
+      "registered_at": "2026-07-28T14:37:43.387907+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.753099,
+        "valid_pr_auc": 0.694424,
+        "valid_brier": 0.199825,
+        "test_roc_auc": 0.742996,
+        "test_pr_auc": 0.600896
+      },
+      "params": {
+        "family": "baseline_logreg",
+        "type": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 2000,
+        "class_weight": "balanced"
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-07-28T14:37:43.385746+00:00"
+      },
+      "fit_seconds": 0.054
+    },
+    {
+      "name": "retail-churn-90d",
+      "version": "v4",
+      "model_id": "retail-churn-90d:v4",
+      "stage": "archived",
+      "artefact_path": "models/retail-churn-90d_v4.joblib",
+      "registered_at": "2026-07-28T14:37:43.405856+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.791527,
+        "valid_pr_auc": 0.730556,
+        "valid_brier": 0.183486,
+        "test_roc_auc": 0.7256,
+        "test_pr_auc": 0.562296
+      },
+      "params": {
+        "family": "candidate_gbdt",
+        "type": "lightgbm",
+        "n_estimators": 600,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_child_samples": 40,
+        "subsample": 0.9,
+        "subsample_freq": 1,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0,
+        "early_stopping_rounds": 50
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-07-28T14:37:43.385746+00:00"
+      },
+      "fit_seconds": 0.435,
+      "promoted_at": "2026-08-07T15:08:08.427420+00:00",
+      "archived_at": "2026-08-07T15:08:08.428387+00:00"
+    },
+    {
+      "name": "retail-churn-90d",
+      "version": "v5",
+      "model_id": "retail-churn-90d:v5",
+      "stage": "staging",
+      "artefact_path": "models/retail-churn-90d_v5.joblib",
+      "registered_at": "2026-08-07T15:07:58.505951+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.753099,
+        "valid_pr_auc": 0.694424,
+        "valid_brier": 0.199825,
+        "test_roc_auc": 0.742996,
+        "test_pr_auc": 0.600896
+      },
+      "params": {
+        "family": "baseline_logreg",
+        "type": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 2000,
+        "class_weight": "balanced"
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-fc-v18-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-08-07T15:07:58.503544+00:00"
+      },
+      "fit_seconds": 0.064
+    },
+    {
+      "name": "retail-churn-90d",
+      "version": "v6",
+      "model_id": "retail-churn-90d:v6",
+      "stage": "production",
+      "artefact_path": "models/retail-churn-90d_v6.joblib",
+      "registered_at": "2026-08-07T15:07:58.528519+00:00",
+      "metrics": {
+        "valid_roc_auc": 0.791527,
+        "valid_pr_auc": 0.730556,
+        "valid_brier": 0.183486,
+        "test_roc_auc": 0.7256,
+        "test_pr_auc": 0.562296
+      },
+      "params": {
+        "family": "candidate_gbdt",
+        "type": "lightgbm",
+        "n_estimators": 600,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_child_samples": 40,
+        "subsample": 0.9,
+        "subsample_freq": 1,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0,
+        "early_stopping_rounds": 50
+      },
+      "feature_columns": [
+        "recency_days",
+        "tenure_days",
+        "active_days_ratio",
+        "avg_interpurchase_gap_days",
+        "interpurchase_gap_cv",
+        "recency_over_avg_gap",
+        "orders_30d",
+        "orders_90d",
+        "orders_180d",
+        "order_freq_trend",
+        "revenue_30d",
+        "revenue_90d",
+        "revenue_180d",
+        "lifetime_revenue",
+        "aov_90d",
+        "revenue_trend",
+        "distinct_products_90d",
+        "avg_items_per_order_90d",
+        "avg_unit_price_90d",
+        "product_breadth_ratio",
+        "n_returns_180d",
+        "return_value_ratio_180d",
+        "country_grp"
+      ],
+      "n_features": 23,
+      "label_definition": {
+        "name": "churn_90d",
+        "activity_window_days": 180,
+        "horizon_days": 90,
+        "snapshot_dates": [
+          "2011-03-31",
+          "2011-04-30",
+          "2011-05-31",
+          "2011-06-30",
+          "2011-07-31",
+          "2011-08-31"
+        ]
+      },
+      "train_snapshots": [
+        "2011-03-31",
+        "2011-04-30",
+        "2011-05-31"
+      ],
+      "n_train_rows": 7222,
+      "country_whitelist": [
+        "United Kingdom",
+        "Germany",
+        "France",
+        "EIRE",
+        "Spain",
+        "Netherlands"
+      ],
+      "environment": {
+        "python": "3.12.3",
+        "platform": "Linux-6.18.5-fc-v18-x86_64-with-glibc2.39",
+        "numpy": "2.4.4",
+        "pandas": "3.0.2",
+        "scikit_learn": "1.8.0",
+        "git_sha": null,
+        "run_at_utc": "2026-08-07T15:07:58.503544+00:00"
+      },
+      "fit_seconds": 0.441,
+      "promoted_at": "2026-08-07T15:08:08.428406+00:00",
+      "archived_at": "2026-08-07T15:08:08.427401+00:00"
+    }
+  ],
+  "created_at": "2026-07-28T13:56:01.966925+00:00",
+  "updated_at": "2026-08-07T15:08:08.428409+00:00"
+}

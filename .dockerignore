@@ -1,0 +1,9 @@
+.git
+.pytest_cache
+__pycache__
+notebooks
+docs
+data/raw
+data/incoming
+artifacts/logs
+*.ipynb
