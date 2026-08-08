@@ -1,6 +1,8 @@
 # Customer Churn Prediction — Mini Production ML System
 
-MLME assignment. The system predicts whether a customer who bought something in
+Name: Kinjal Joshi | StudentId: 2025EM1100339
+
+The system predicts whether a customer who bought something in
 the last 180 days will stop buying in the next 90 days, and serves that
 prediction through an API.
 
@@ -140,7 +142,7 @@ artifacts/              eval reports, monitoring reports, logs
 
 ---
 
-## Things I'd flag myself
+## Things to flag
 
 - **The 30% offer success rate is assumed, not measured.** All the money numbers
   depend on it. Properly measuring it needs a randomised control group, which this
